@@ -10,4 +10,22 @@ function makeTimeSeries(data, field, name){
   return new TimeSeries(series)
 }
 
-export { makeTimeSeries }
+function sortByDate(array){
+    return array.sort((a, b) => {
+        let result = 0,
+            aDate = new Date(a.year, a.month),
+            bDate = new Date(b.year, b.month)
+        
+        if(aDate > bDate){
+          result = 1
+        } else if(aDate < bDate){
+          result = -1
+        } else if(aDate === bDate){
+          result = 0
+        }
+        
+        return result
+    })
+  }
+
+export { sortByDate, makeTimeSeries }

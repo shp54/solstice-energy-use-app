@@ -4,7 +4,7 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import { makeTimeSeries } from './helpers'
+import { makeTimeSeries, sortByDate } from './helpers'
 import TimeSeriesGraph from './TimeSeriesGraph'
 import './App.css';
 
@@ -20,30 +20,12 @@ class App extends Component {
       data: []
     }
   }
-    
-  sortByDate(array){
-    return array.sort((a, b) => {
-        let result = 0,
-            aDate = new Date(a.year, a.month),
-            bDate = new Date(b.year, b.month)
-        
-        if(aDate > bDate){
-          result = 1
-        } else if(aDate < bDate){
-          result = -1
-        } else if(aDate === bDate){
-          result = 0
-        }
-        
-        return result
-    })
-  }
-
+   
   componentWillMount(){
     fetch("/data")
       .then((rsp) => rsp.json())
       .then((data) => {
-        this.setState({ data: this.sortByDate(data) })
+        this.setState({ data: sortByDate(data) })
       })
   }
 
