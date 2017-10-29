@@ -5,9 +5,7 @@ const TimeSeriesGraph = ({ title, series, width, label, format }) => {
     if(!Array.isArray(series)){
       series = [series]
     }
-    
-    console.log(series, series[0], series[0].timerange())
-  
+      
     return (
       <div>
         <h1>{title}</h1>
