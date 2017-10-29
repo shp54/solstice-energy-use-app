@@ -40,16 +40,16 @@ class App extends Component {
             <li><Link to="/bill">Monthly Bill</Link></li>
             <li><Link to="/savings">Monthly Savings</Link></li>
             <li><Link to="/usage">Monthly Usage</Link></li>
-            <li><Link to="/savingsperkwh">Monthly Savings Per kWh</Link></li>
             <li><Link to="/costperkwh">Monthly Cost Per kWh</Link></li>
+            <li><Link to="/savingsperkwh">Monthly Savings Per kWh</Link></li>
           </ul>
         </header>
         <div className="App-intro">          
           <Route exact path="/bill" component={(props) => <GraphPage title='Monthly Bill' data={this.state.data} seriesName='utilityBills' seriesValue='bill' label="USD" format="$,.2f"  />} />
           <Route exact path="/savings" component={(props) => <GraphPage title='Monthly Savings' data={this.state.data} seriesName='solarSavings' seriesValue='savings' label="USD" format="$,.2f" />} />
           <Route exact path="/usage" component={(props) => <GraphPage title='Monthly Usage' data={this.state.data} seriesName='monthlyUsage' seriesValue='kwh' label="kWh" format=".2f" />} />
-          <Route exact path="/savingsperkwh" component={(props) => <GraphPage title='Monthly Savings Per kWh' data={this.state.data} seriesName='solarSavingsKwh' seriesValue={(data) => data.kwh / data.savings } label="USD" format="$,.2f" />} />
-          <Route exact path="/costperkwh" component={(props) => <GraphPage title='Monthly Cost Per kWh' data={this.state.data} seriesName='costKwh' seriesValue={(data) => data.kwh / data.bill } label="USD" format="$,.2f" />} />
+          <Route exact path="/costperkwh" component={(props) => <GraphPage title='Monthly Cost Per kWh' data={this.state.data} seriesName='costKwh' seriesValue={(data) => data.bill / data.kwh } label="USD" format="$,.2f" />} />
+          <Route exact path="/savingsperkwh" component={(props) => <GraphPage title='Monthly Savings Per kWh' data={this.state.data} seriesName='savingsKwh' seriesValue={(data) => data.savings / data.kwh } label="USD" format="$,.2f" />} />
           <Route exact path="/" component={(props) => 
             <div>
               <GraphPage title='Monthly Bill' data={this.state.data} seriesName='utilityBills' seriesValue='bill' label="USD" format="$,.2f"  />

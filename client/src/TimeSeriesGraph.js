@@ -11,7 +11,7 @@ const TimeSeriesGraph = ({ title, series, width, label, format }) => {
         <h1>{title}</h1>
         <ChartContainer timeRange={series ? series[0].timerange() : null} width={width}>
           <ChartRow height="200">
-              <YAxis id="axis1" label={label} min={0} max={series[0].max() + 10} width="60" type="linear" format={format} />
+              <YAxis id="axis1" label={label} min={0} max={series[0].max()} width="60" type="linear" format={format} />
               <Charts>
                 {series.map((series, index) => (<LineChart axis="axis1" series={series} key={index} />))}     
               </Charts>
