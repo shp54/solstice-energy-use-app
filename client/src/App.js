@@ -4,9 +4,13 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import BillPage from './BillPage'
-import SavingsPage from './SavingsPage'
+import { makeTimeSeries } from './helpers'
+import TimeSeriesGraph from './TimeSeriesGraph'
 import './App.css';
+
+const GraphPage = ({title, data, seriesName, seriesValue, label, format }) => {
+  return (data.length > 0) ?  <TimeSeriesGraph title={title} series={makeTimeSeries(data, seriesValue, seriesName)} width={800} label={label} format={format} /> : null
+}
 
 class App extends Component {
   
@@ -39,13 +43,7 @@ class App extends Component {
     fetch("/data")
       .then((rsp) => rsp.json())
       .then((data) => {
-        let timedata = this.sortByDate(data)
-        this.setState({ 
-          data: timedata, 
-          /*billSeries: this.makeTimeSeries(timedata, 'bill', "utilityBills"),
-          savingsSeries: this.makeTimeSeries(timedata, 'savings', "solarSavings"),
-          usageSeries: this.makeTimeSeries(timedata, 'kwh', "usage")*/
-        })
+        this.setState({ data: this.sortByDate(data) })
       })
   }
 
@@ -57,8 +55,9 @@ class App extends Component {
           <h1 className="App-title">Energy Spending and Usage</h1>
         </header>
         <div className="App-intro">          
-          <Route exact path="/" component={() => <BillPage title='Bill' data={this.state.data} />} />
-          <Route exact path="/savings" component={() => <SavingsPage title='Savings' data={this.state.data} />} />
+          <Route exact path="/" component={() => <GraphPage title='Bill' data={this.state.data} seriesName='utilityBills' seriesValue='bill' label="USD" format="$,.2f"  />} />
+          <Route exact path="/savings" component={() => <GraphPage title='Savings' data={this.state.data} seriesName='solarSavings' seriesValue='savings' label="USD" format="$,.2f" />} />
+          <Route exact path="/usage" component={() => <GraphPage title='Usage' data={this.state.data} seriesName='monthlyUsage' seriesValue='kwh' label="kWh" format=".2f" />} />
         </div>
       </div>
       </Router>
