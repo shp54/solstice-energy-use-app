@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import { TimeSeries } from "pondjs";
-import TimeSeriesGraph from './TimeSeriesGraph'
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
+import BillPage from './BillPage'
+import SavingsPage from './SavingsPage'
 import './App.css';
 
 class App extends Component {
@@ -11,17 +16,7 @@ class App extends Component {
       data: []
     }
   }
-  
-  makeTimeSeries(data, field, name){
-    let series = {
-      name: name,
-      columns: ["time", "value"],
-      points: data.map((data) => [new Date(data.year, data.month - 1, 30).getTime(), data[field]])
-    }
-
-    return new TimeSeries(series)
-  }
-   
+    
   sortByDate(array){
     return array.sort((a, b) => {
         let result = 0,
@@ -47,27 +42,26 @@ class App extends Component {
         let timedata = this.sortByDate(data)
         this.setState({ 
           data: timedata, 
-          billSeries: this.makeTimeSeries(timedata, 'bill', "utilityBills"),
+          /*billSeries: this.makeTimeSeries(timedata, 'bill', "utilityBills"),
           savingsSeries: this.makeTimeSeries(timedata, 'savings', "solarSavings"),
-          usageSeries: this.makeTimeSeries(timedata, 'kwh', "usage")
+          usageSeries: this.makeTimeSeries(timedata, 'kwh', "usage")*/
         })
       })
   }
 
   render() {   
     return (
+      <Router>
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Energy Spending and Usage</h1>
         </header>
-        <div className="App-intro">
-        { this.state.billSeries ? ( <TimeSeriesGraph title='Bill' series={this.state.billSeries} width={800} label="USD" format="$,.2f" /> ) : null }
-        { this.state.savingsSeries ? ( <TimeSeriesGraph title='Savings' series={this.state.savingsSeries} width={800} label="USD" format="$,.2f" /> ): null }
-        { this.state.usageSeries ? ( <TimeSeriesGraph title='Usage' series={this.state.usageSeries} width={800} label="kWh" format=".2f" /> ): null }
-        { this.state.savingsSeries && this.state.billSeries ? 
-        ( <TimeSeriesGraph title='Bills and Savings' series={[this.state.billSeries, this.state.savingsSeries]} width={800} label="USD" format="$,.2f" /> )  : null}
+        <div className="App-intro">          
+          <Route exact path="/" component={() => <BillPage title='Bill' data={this.state.data} />} />
+          <Route exact path="/savings" component={() => <SavingsPage title='Savings' data={this.state.data} />} />
         </div>
       </div>
+      </Router>
     );
   }
 }
